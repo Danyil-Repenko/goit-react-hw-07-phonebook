@@ -2,7 +2,12 @@ import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
-const contactsInitialState = { contacts: [] }
+const contactsInitialState =
+{
+    items: [{ id: "2232224", name: "MediaKeyMessageEvent", number: "4545344667" }],
+    isLoading: false,
+    error: null
+}
 
 const contactSlice = createSlice({
     name: 'contacts',
@@ -10,7 +15,7 @@ const contactSlice = createSlice({
     reducers: {
         addContact: {
             reducer(state, action) {
-                state.contacts.push(action.payload);
+                state.items.push(action.payload);
             },
             prepare({ name, number }) {
                 return {
@@ -23,8 +28,8 @@ const contactSlice = createSlice({
             }
         },
         deleteContact(state, action) {
-            const index = state.contacts.findIndex(task => task.id === action.payload);
-            state.contacts.splice(index, 1);
+            const index = state.items.findIndex(task => task.id === action.payload);
+            state.items.splice(index, 1);
         },
     }
 })

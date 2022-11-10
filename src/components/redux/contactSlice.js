@@ -5,7 +5,7 @@ import { fetchAll, addContacto, deleteContacto } from "./operations";
 
 const contactsInitialState =
 {
-    items: [{ id: "2232224", name: "MediaMesevent", number: "4545344667" }],
+    items: [],
     isLoading: false,
     error: null
 }
@@ -41,44 +41,47 @@ const contactSlice = createSlice({
             state.items.splice(index, 1);
         },
     },
-    extraReducers: {
-        [fetchAll.pending](state) {
-            handlePending(state)
-        },
-        [fetchAll.fulfilled](state, action) {
-            state.isLoading = false;
-            state.error = null;
-            state.itmes = action.payload;
-        },
-        [fetchAll.rejected](state, action) {
-            handleRejected(state, action);
-        },
-        [addContacto.pending](state) {
-            handlePending(state);
-        },
-        [addContacto.fulfilled](state, action) {
-            state.isLoading = false;
-            state.error = null;
-            state.items.push(action.payload);
-        },
-        [addContacto.rejected](state, action) {
-            handleRejected(state, action);
-        },
-        [deleteContacto.pending](state) {
-            handlePending(state);
-        },
-        [deleteContacto.fulfilled](state, action) {
-            state.isLoading = false;
-            state.error = null;
-            const index = state.items.findIndex(
-                task => task.id === action.payload.id
-            );
-            state.items.splice(index, 1);
-        },
-        [deleteContacto.rejected](state, action) {
-            handleRejected(state, action);
-        },
-    }
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchAll.pending, (state) => {
+                handlePending(state)
+            })
+            .addCase(fetchAll.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.error = null;
+                state.itmes = action.payload;
+            })
+            .addCase(fetchAll.rejected, (state, action) => {
+                handleRejected(state, action);
+            }),
+            builder
+                .addCase(addContacto.pending, (state) => {
+                    handlePending(state);
+                })
+                .addCase(addContacto.fulfilled, (state, action) => {
+                    state.isLoading = false;
+                    state.error = null;
+                    state.items.push(action.payload);
+                })
+                .addCase(addContacto.rejected, (state, action) => {
+                    handleRejected(state, action);
+                }),
+            builder
+                .addCase(deleteContacto.pending, (state) => {
+                    handlePending(state);
+                })
+                .addCase(deleteContacto.fulfilled, (state, action) => {
+                    state.isLoading = false;
+                    state.error = null;
+                    const index = state.items.findIndex(
+                        task => task.id === action.payload.id
+                    );
+                    state.items.splice(index, 1);
+                })
+                .addCase(deleteContacto.rejected, (state, action) => {
+                    handleRejected(state, action);
+                })
+    },
 })
 
 const persistConfig = {

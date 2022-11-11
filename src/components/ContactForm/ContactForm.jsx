@@ -1,12 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContacts } from 'components/redux/selectors';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { addContact } from 'components/redux/contactSlice';
-import {
-  fetchAll,
-  addContacto,
-  deleteContacto,
-} from 'components/redux/operations';
+import { addContact } from 'components/redux/operations';
 import {
   Form,
   InputWrapper,
@@ -24,7 +19,7 @@ export const ContactForm = () => {
 
     const name = e.target.elements.name.value;
     const number = e.target.elements.number.value;
-    const nameSameness = contacts.items.find(contact => contact.name === name);
+    const nameSameness = contacts.find(contact => contact.name === name);
 
     if (nameSameness) {
       Notify.info(`${name} is already in contacts`);

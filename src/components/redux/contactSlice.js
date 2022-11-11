@@ -1,7 +1,7 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { fetchAll, addContacto, deleteContacto } from "./operations";
+import { fetchAll, addContact, deleteContact } from "./operations";
 
 const contactsInitialState =
 {
@@ -21,26 +21,6 @@ const handleRejected = (state, action) => {
 const contactSlice = createSlice({
     name: 'contacts',
     initialState: contactsInitialState,
-    reducers: {
-        addContact: {
-            reducer(state, action) {
-                state.items.push(action.payload);
-            },
-            prepare({ name, number }) {
-                return {
-                    payload: {
-                        name,
-                        number,
-                        id: nanoid(),
-                    }
-                }
-            }
-        },
-        deleteContact(state, action) {
-            const index = state.items.findIndex(task => task.id === action.payload);
-            state.items.splice(index, 1);
-        },
-    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchAll.pending, (state) => {
@@ -49,38 +29,36 @@ const contactSlice = createSlice({
             .addCase(fetchAll.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.error = null;
-                state.itmes = action.payload;
+                state.items = action.payload;
             })
             .addCase(fetchAll.rejected, (state, action) => {
                 handleRejected(state, action);
-            }),
-            builder
-                .addCase(addContacto.pending, (state) => {
-                    handlePending(state);
-                })
-                .addCase(addContacto.fulfilled, (state, action) => {
-                    state.isLoading = false;
-                    state.error = null;
-                    state.items.push(action.payload);
-                })
-                .addCase(addContacto.rejected, (state, action) => {
-                    handleRejected(state, action);
-                }),
-            builder
-                .addCase(deleteContacto.pending, (state) => {
-                    handlePending(state);
-                })
-                .addCase(deleteContacto.fulfilled, (state, action) => {
-                    state.isLoading = false;
-                    state.error = null;
-                    const index = state.items.findIndex(
-                        task => task.id === action.payload.id
-                    );
-                    state.items.splice(index, 1);
-                })
-                .addCase(deleteContacto.rejected, (state, action) => {
-                    handleRejected(state, action);
-                })
+            })
+            .addCase(addContact.pending, (state) => {
+                handlePending(state);
+            })
+            .addCase(addContact.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.error = null;
+                state.items.push(action.payload);
+            })
+            .addCase(addContact.rejected, (state, action) => {
+                handleRejected(state, action);
+            })
+            .addCase(deleteContact.pending, (state) => {
+                handlePending(state);
+            })
+            .addCase(deleteContact.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.error = null;
+                const index = state.items.findIndex(
+                    task => task.id === action.payload.id
+                );
+                state.items.splice(index, 1);
+            })
+            .addCase(deleteContact.rejected, (state, action) => {
+                handleRejected(state, action);
+            })
     },
 })
 
@@ -90,5 +68,3 @@ const persistConfig = {
 }
 
 export const contactReducer = persistReducer(persistConfig, contactSlice.reducer)
-
-export const { addContact, deleteContact } = contactSlice.actions;

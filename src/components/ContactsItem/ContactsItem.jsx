@@ -7,7 +7,7 @@ export const ContactItem = ({ contact: { name, number, id } }) => {
   const removeContact = () => dispatch(deleteContact(id));
 
   return (
-    <li style={{ marginBottom: 10 }}>
+    <li style={{ margin: '0 0 10px 20px ' }}>
       {name}: {number}
       <DeleteBtn type="button" onClick={removeContact}>
         Delete

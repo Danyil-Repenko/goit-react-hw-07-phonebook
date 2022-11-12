@@ -3,7 +3,7 @@ import { ContactList } from './ContactList/ContactList';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Filter } from './Filter/Filter';
-import { Wrapper, CenteredDiv } from './App.styled';
+import { Wrapper, CenteredDiv, LoadingMessage } from './App.styled';
 import { selectLoadingState, selectError } from 'components/redux/selectors';
 import { fetchAll } from 'components/redux/operations';
 
@@ -26,7 +26,7 @@ export function App() {
         <h2>Contacts</h2>
         <Filter />
       </CenteredDiv>
-      {loadingState && !error && <p style={{ margin: '0 auto' }}>Loading...</p>}
+      {loadingState && !error && <LoadingMessage>Loading...</LoadingMessage>}
       <ContactList />
     </Wrapper>
   );
